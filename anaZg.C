@@ -37,7 +37,10 @@ void anaZg::Loop()
     nb = fChain->GetEntry(jentry);   nbytes += nb;
     // if (Cut(ientry) < 0) continue;
     hCounter->Fill(1);
-    if(pho_Medium !=1) continue;
+    // if(pho_Medium !=1) continue;
+    if(fabs(pho_Eta)>1.4442)continue; //photon in EB only
+    //https://twiki.cern.ch/twiki/bin/view/CMS/MultivariatePhotonIdentificationRun2
+    if(pho_MVA< 0.374)continue; //for 90% efficiency WP, the cut is > 0.374 for EB and >0.336 for EE
     TLorentzVector pho;
     pho.SetPtEtaPhiM(pho_Pt,pho_Eta,pho_Phi, 0);
     hCounter->Fill(2);
