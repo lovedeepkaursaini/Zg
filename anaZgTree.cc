@@ -132,19 +132,21 @@ void anaZgTree::Loop(TString name)
     event = event;
     run = run;
     hCounter->Fill(0);
-    if(nPho<1)continue;
+    if(!((HLTPho>>  7 & 1) == 1))continue;
     hCounter->Fill(1);
+    if(nPho<1)continue;
+    hCounter->Fill(2);
     vector <int> iphotons;
     for (int ipho = 0; ipho < nPho; ++ipho){
       // PRE-PHOTON SELECTION
-      if((*phoEt)[ipho] < 150) continue;
+      if((*phoEt)[ipho] < 190) continue;
       if( fabs((*phoSCEta)[ipho])>2.5) continue;
       if( fabs((*phoSCEta)[ipho])<1.566 && fabs((*phoSCEta)[ipho])>1.4442) continue;
       //if (!passPhotonID(ipho, 1)) continue;
       iphotons.push_back(ipho);
     }
     if(iphotons.size() < 1 ) continue;
-    hCounter->Fill(2);
+    hCounter->Fill(3);
     
     TLorentzVector pho;
     int j = iphotons[0];
@@ -166,6 +168,7 @@ void anaZgTree::Loop(TString name)
     for (int ijet = 0; ijet < nAK8Jet; ++ijet){
      if(AK8JetPt->at(ijet)<50. )continue;
      if(fabs(AK8JetEta->at(ijet))>2.5) continue;
+     if(AK8JetPFLooseId==false)continue;
      double drjetgamma = dR((*AK8JetEta)[ijet],(*AK8JetPhi)[ijet],pho.Eta(),pho.Phi());
      if(drjetgamma<0.5)continue;
      iak8jets.push_back(ijet);
@@ -187,6 +190,7 @@ void anaZgTree::Loop(TString name)
     for (int ijet = 0; ijet < nJet; ++ijet){
       if(jetPt->at(ijet)<30. )continue;
       if(fabs(jetEta->at(ijet))>2.5) continue;
+      if(jetPFLooseId==false)continue;
       double drjetgamma = dR((*jetEta)[ijet],(*jetPhi)[ijet],pho.Eta(),pho.Phi());
       if(drjetgamma<0.5)continue;
       ijets.push_back(ijet);
