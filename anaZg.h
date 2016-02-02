@@ -11,7 +11,7 @@
 #include <TROOT.h>
 #include <TChain.h>
 #include <TFile.h>
-
+#include <iostream>
 // Header file for the classes stored in the TTree if any.
 
 class anaZg {
@@ -37,10 +37,27 @@ public :
    Float_t         fatJ_Pt;
    Float_t         fatJ_Eta;
    Float_t         fatJ_Phi;
+   Float_t         fatJ_En;
+   Float_t         fatJ_Mass;
    Float_t         fatJ_SDMass;
+   Float_t         fatJ_SDMassCorr;
+   Float_t         fatJ_prdMass;
+   Float_t         fatJ_prdMassCorr;
    Float_t         fatJ_Tau21;
    Int_t           fatJ_Ztag;
    Float_t         fatJ_DSVBtag;
+   Float_t         SDSJ0_Pt;
+   Float_t         SDSJ0_Eta;
+   Float_t         SDSJ0_Phi;
+   Float_t         SDSJ0_Mass;
+   Float_t         SDSJ0_En;
+   Float_t         SDSJ0_CSV;
+   Float_t         SDSJ1_Pt;
+   Float_t         SDSJ1_Eta;
+   Float_t         SDSJ1_Phi;
+   Float_t         SDSJ1_Mass;
+   Float_t         SDSJ1_En;
+   Float_t         SDSJ1_CSV;
    Float_t         J1_Pt;
    Float_t         J1_Eta;
    Float_t         J1_Phi;
@@ -68,10 +85,27 @@ public :
    TBranch        *b_fatJ_Pt;   //!
    TBranch        *b_fatJ_Eta;   //!
    TBranch        *b_fatJ_Phi;   //!
+   TBranch        *b_fatJ_En;
    TBranch        *b_fatJ_SDMass;   //!
+   TBranch        *b_fatJ_SDMassCorr;   //!
+   TBranch        *b_fatJ_prdMass;   //!
+   TBranch        *b_fatJ_prdMassCorr;   //!
+   TBranch        *b_fatJ_Mass;   //!
    TBranch        *b_fatJ_Tau21;   //!
    TBranch        *b_fatJ_Ztag;   //!
    TBranch        *b_fatJ_DSVBtag;   //!
+   TBranch        *b_SDSJ0_Pt;   //!
+   TBranch        *b_SDSJ0_Eta;   //!
+   TBranch        *b_SDSJ0_Phi;   //!
+   TBranch        *b_SDSJ0_Mass;   //!
+   TBranch        *b_SDSJ0_En;   //!
+   TBranch        *b_SDSJ0_CSV;   //!
+   TBranch        *b_SDSJ1_Pt;   //!
+   TBranch        *b_SDSJ1_Eta;   //!
+   TBranch        *b_SDSJ1_Phi;   //!
+   TBranch        *b_SDSJ1_Mass;   //!
+   TBranch        *b_SDSJ1_En;   //!
+   TBranch        *b_SDSJ1_CSV;   //!
    TBranch        *b_J1_Pt;   //!
    TBranch        *b_J1_Eta;   //!
    TBranch        *b_J1_Phi;   //!
@@ -83,7 +117,10 @@ public :
    TBranch        *b_J2_CSVBtag;   //!
    TBranch        *b_J2_En;   //!
 
-   anaZg(TTree *tree=0);
+   anaZg(std::string filename_,double wt_,TTree *tree=0);
+   std::string filenam;
+   double wt;
+
    virtual ~anaZg();
    virtual Int_t    Cut(Long64_t entry);
    virtual Int_t    GetEntry(Long64_t entry);
@@ -97,19 +134,23 @@ public :
 #endif
 
 #ifdef anaZg_cxx
-anaZg::anaZg(TTree *tree) : fChain(0) 
+anaZg::anaZg(std::string filenam_,double wt_,TTree *tree) : fChain(0) 
 {
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("minitree_job_SinglePho_Run2015.root");
-      if (!f || !f->IsOpen()) {
-         f = new TFile("minitree_job_SinglePho_Run2015.root");
+     std::string nam = filenam_+".root";
+     std::cout<<nam<<std::endl;
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject(nam.c_str());
+      if (!f) {
+         f = new TFile(nam.c_str());
       }
-      f->GetObject("miniTree",tree);
-
+   tree = (TTree*)gDirectory->Get("miniTree");
    }
    Init(tree);
+   wt  = wt_;
+   filenam_ = filenam_.erase(0,9);
+   filenam = filenam_;
 }
 
 anaZg::~anaZg()
@@ -168,10 +209,27 @@ void anaZg::Init(TTree *tree)
    fChain->SetBranchAddress("fatJ_Pt", &fatJ_Pt, &b_fatJ_Pt);
    fChain->SetBranchAddress("fatJ_Eta", &fatJ_Eta, &b_fatJ_Eta);
    fChain->SetBranchAddress("fatJ_Phi", &fatJ_Phi, &b_fatJ_Phi);
+   fChain->SetBranchAddress("fatJ_En", &fatJ_En, &b_fatJ_En);
+   fChain->SetBranchAddress("fatJ_Mass", &fatJ_Mass, &b_fatJ_Mass);
    fChain->SetBranchAddress("fatJ_SDMass", &fatJ_SDMass, &b_fatJ_SDMass);
+   fChain->SetBranchAddress("fatJ_SDMassCorr", &fatJ_SDMassCorr, &b_fatJ_SDMassCorr);
+   fChain->SetBranchAddress("fatJ_prdMass", &fatJ_prdMass, &b_fatJ_prdMass);
+   fChain->SetBranchAddress("fatJ_prdMassCorr", &fatJ_prdMassCorr, &b_fatJ_prdMassCorr);
    fChain->SetBranchAddress("fatJ_Tau21", &fatJ_Tau21, &b_fatJ_Tau21);
    fChain->SetBranchAddress("fatJ_Ztag", &fatJ_Ztag, &b_fatJ_Ztag);
    fChain->SetBranchAddress("fatJ_DSVBtag", &fatJ_DSVBtag, &b_fatJ_DSVBtag);
+   fChain->SetBranchAddress("SDSJ0_Pt", &SDSJ0_Pt, &b_SDSJ0_Pt);
+   fChain->SetBranchAddress("SDSJ0_Eta", &SDSJ0_Eta, &b_SDSJ0_Eta);
+   fChain->SetBranchAddress("SDSJ0_Phi", &SDSJ0_Phi, &b_SDSJ0_Phi);
+   fChain->SetBranchAddress("SDSJ0_Mass", &SDSJ0_Mass, &b_SDSJ0_Mass);
+   fChain->SetBranchAddress("SDSJ0_En", &SDSJ0_En, &b_SDSJ0_En);
+   fChain->SetBranchAddress("SDSJ0_CSV", &SDSJ0_CSV, &b_SDSJ0_CSV);
+   fChain->SetBranchAddress("SDSJ1_Pt", &SDSJ1_Pt, &b_SDSJ1_Pt);
+   fChain->SetBranchAddress("SDSJ1_Eta", &SDSJ1_Eta, &b_SDSJ1_Eta);
+   fChain->SetBranchAddress("SDSJ1_Phi", &SDSJ1_Phi, &b_SDSJ1_Phi);
+   fChain->SetBranchAddress("SDSJ1_Mass", &SDSJ1_Mass, &b_SDSJ1_Mass);
+   fChain->SetBranchAddress("SDSJ1_En", &SDSJ1_En, &b_SDSJ1_En);
+   fChain->SetBranchAddress("SDSJ1_CSV", &SDSJ1_CSV, &b_SDSJ1_CSV);
    fChain->SetBranchAddress("J1_Pt", &J1_Pt, &b_J1_Pt);
    fChain->SetBranchAddress("J1_Eta", &J1_Eta, &b_J1_Eta);
    fChain->SetBranchAddress("J1_Phi", &J1_Phi, &b_J1_Phi);

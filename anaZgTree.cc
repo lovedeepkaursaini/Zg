@@ -16,6 +16,7 @@
 #include <cmath>
 #include "SPRING15_25ns.cc"
 #include <fstream>
+#include <string>
 using namespace std;
 float pho_Pt;
 float pho_Phi;
@@ -30,10 +31,28 @@ float pho_MVA;
 float fatJ_Pt;
 float fatJ_Eta;
 float fatJ_Phi;
+float fatJ_En;
+float fatJ_Mass;
 float fatJ_SDMass;
+float fatJ_SDMassCorr;
+float fatJ_prdMass;
+float fatJ_prdMassCorr;
 float fatJ_Tau21;
 int fatJ_Ztag;
 float fatJ_DSVBtag;
+float SDSJ0_Pt;
+float SDSJ0_Eta;
+float SDSJ0_Phi;
+float SDSJ0_Mass;
+float SDSJ0_En;
+float SDSJ0_CSV;
+float SDSJ1_Pt;
+float SDSJ1_Eta;
+float SDSJ1_Phi;
+float SDSJ1_Mass;
+float SDSJ1_En;
+float SDSJ1_CSV;
+
 float J1_Pt;
 float J1_Eta;
 float J1_Phi;
@@ -59,10 +78,28 @@ void anaZgTree::clearVariables(){
   fatJ_Pt = -9; 
   fatJ_Eta = -9;
   fatJ_Phi = -9;
+  fatJ_En = -9;
+  fatJ_Mass = -9;
   fatJ_SDMass = -9;
+  fatJ_SDMassCorr = -9;
+  fatJ_prdMass = -9;
+  fatJ_prdMassCorr = -9;
   fatJ_Tau21 = -9;
   fatJ_Ztag = 0;
   fatJ_DSVBtag = -9;
+  SDSJ0_Pt = -9;
+  SDSJ0_Eta = -9;
+  SDSJ0_Phi = -9;
+  SDSJ0_Mass = -9;
+  SDSJ0_En = -9;
+  SDSJ0_CSV = -9;
+  SDSJ1_Pt = -9;
+  SDSJ1_Eta = -9;
+  SDSJ1_Phi = -9;
+  SDSJ1_Mass = -9;
+  SDSJ1_En = -9;
+  SDSJ1_CSV = -9;
+
   J1_Pt = -9;
   J1_Eta = -9;
   J1_Phi = -9;
@@ -100,10 +137,28 @@ void anaZgTree::Loop(TString name)
   miniTree->Branch("fatJ_Pt", &fatJ_Pt, "fatJ_Pt/F");
   miniTree->Branch("fatJ_Eta", &fatJ_Eta, "fatJ_Eta/F");
   miniTree->Branch("fatJ_Phi", &fatJ_Phi, "fatJ_Phi/F");
+  miniTree->Branch("fatJ_En", &fatJ_En, "fatJ_En/F");
+  miniTree->Branch("fatJ_Mass", &fatJ_Mass, "fatJ_Mass/F");
   miniTree->Branch("fatJ_SDMass", &fatJ_SDMass, "fatJ_SDMass/F");
+  miniTree->Branch("fatJ_SDMassCorr", &fatJ_SDMassCorr, "fatJ_SDMassCorr/F");
+  miniTree->Branch("fatJ_prdMass", &fatJ_prdMass, "fatJ_prdMass/F");
+  miniTree->Branch("fatJ_prdMassCorr", &fatJ_prdMassCorr, "fatJ_prdMassCorr/F");
   miniTree->Branch("fatJ_Tau21", &fatJ_Tau21, "fatJ_Tau21/F");
   miniTree->Branch("fatJ_Ztag", &fatJ_Ztag, "fatJ_Ztag/I");
   miniTree->Branch("fatJ_DSVBtag", &fatJ_DSVBtag, "fatJ_DSVBtag/F");
+  miniTree->Branch("SDSJ0_Pt",&SDSJ0_Pt,"SDSJ0_Pt/F");
+  miniTree->Branch("SDSJ0_Eta",&SDSJ0_Eta,"SDSJ0_Eta/F");
+  miniTree->Branch("SDSJ0_Phi",&SDSJ0_Phi,"SDSJ0_Phi/F");
+  miniTree->Branch("SDSJ0_Mass",&SDSJ0_Mass,"SDSJ0_Mass/F");
+  miniTree->Branch("SDSJ0_En",&SDSJ0_En,"SDSJ0_En/F");
+  miniTree->Branch("SDSJ0_CSV",&SDSJ0_CSV,"SDSJ0_CSV/F");
+  miniTree->Branch("SDSJ1_Pt",&SDSJ1_Pt,"SDSJ1_Pt/F");
+  miniTree->Branch("SDSJ1_Eta",&SDSJ1_Eta,"SDSJ1_Eta/F");
+  miniTree->Branch("SDSJ1_Phi",&SDSJ1_Phi,"SDSJ1_Phi/F");
+  miniTree->Branch("SDSJ1_Mass",&SDSJ1_Mass,"SDSJ1_Mass/F");
+  miniTree->Branch("SDSJ1_En",&SDSJ1_En,"SDSJ1_En/F");
+  miniTree->Branch("SDSJ1_CSV",&SDSJ1_CSV,"SDSJ1_CSV/F");
+
   miniTree->Branch("J1_Pt", &J1_Pt, "J1_Pt/F");
   miniTree->Branch("J1_Eta", &J1_Eta, "J1_Eta/F");
   miniTree->Branch("J1_Phi", &J1_Phi, "J1_Phi/F");
@@ -175,14 +230,36 @@ void anaZgTree::Loop(TString name)
     }
     
     if (iak8jets.size()>0)  {
+      fatJ_Mass = AK8JetMass->at(iak8jets[0]);
       fatJ_SDMass = AK8CHSSoftDropJetMass->at(iak8jets[0]);
+      fatJ_SDMassCorr = AK8CHSSoftDropJetMassCorr->at(iak8jets[0]);
+      fatJ_prdMass = AK8CHSPrunedJetMass->at(iak8jets[0]);
+      fatJ_prdMassCorr = AK8CHSPrunedJetMassCorr->at(iak8jets[0]);
       fatJ_Tau21 = AK8Jet_tau2->at(iak8jets[0])/AK8Jet_tau1->at(iak8jets[0]);
       if(fatJ_SDMass>70 && fatJ_SDMass<110 && fatJ_Tau21<0.5 )fatJ_Ztag = 1;
       fatJ_Pt = AK8JetPt->at(iak8jets[0]);
       fatJ_Eta = AK8JetEta->at(iak8jets[0]);
       fatJ_Phi = AK8JetPhi->at(iak8jets[0]);
+      fatJ_En =  AK8JetEn->at(iak8jets[0]);
       fatJ_DSVBtag = AK8JetpfBoostedDSVBTag->at(iak8jets[0]);
-      
+      //cout<<"subjets: "<<nAK8softdropSubjet->at(iak8jets[0])<<endl;
+      if(nAK8softdropSubjet->at(iak8jets[0])>1){
+    //   cout<<"fJ mass: "<<fatJ_Mass<<", sujet pt: "<<(*AK8softdropSubjetPt)[iak8jets[0]][0]<<'\t'<<(*AK8softdropSubjetPt)[iak8jets[0]][1]<<endl;  
+       //lead SJ
+       SDSJ0_Pt = (*AK8softdropSubjetPt)[iak8jets[0]][0];
+       SDSJ0_Eta = (*AK8softdropSubjetEta)[iak8jets[0]][0];
+       SDSJ0_Phi = (*AK8softdropSubjetPhi)[iak8jets[0]][0];
+       SDSJ0_Mass = (*AK8softdropSubjetMass)[iak8jets[0]][0];
+       SDSJ0_En = (*AK8softdropSubjetE)[iak8jets[0]][0];
+       SDSJ0_CSV = (*AK8softdropSubjetCSV)[iak8jets[0]][0];
+       //sublead SJ
+       SDSJ1_Pt = (*AK8softdropSubjetPt)[iak8jets[0]][1];
+       SDSJ1_Eta = (*AK8softdropSubjetEta)[iak8jets[0]][1];
+       SDSJ1_Phi = (*AK8softdropSubjetPhi)[iak8jets[0]][1];
+       SDSJ1_Mass = (*AK8softdropSubjetMass)[iak8jets[0]][1];
+       SDSJ1_En = (*AK8softdropSubjetE)[iak8jets[0]][1];
+       SDSJ1_CSV = (*AK8softdropSubjetCSV)[iak8jets[0]][1];
+      } 
     }    
     
     //resolved jets
@@ -200,11 +277,11 @@ void anaZgTree::Loop(TString name)
     
     TLorentzVector jet1;
     int q1 = ijets[0];
-    jet1.SetPtEtaPhiM((*jetPt)[q1], (*jetEta)[q1], (*jetPhi)[q1], 0);
+    jet1.SetPtEtaPhiE((*jetPt)[q1], (*jetEta)[q1], (*jetPhi)[q1], (*jetEn)[q1]);
     
     TLorentzVector jet2;
     int q2 = ijets[1];
-    jet2.SetPtEtaPhiM((*jetPt)[q2], (*jetEta)[q2], (*jetPhi)[q2], 0);
+    jet2.SetPtEtaPhiE((*jetPt)[q2], (*jetEta)[q2], (*jetPhi)[q2], (*jetEn)[q2]);
     
     J1_Pt = (*jetPt)[q1];
     J1_Eta = (*jetEta)[q1];
@@ -228,10 +305,12 @@ void anaZgTree::Loop(TString name)
 
 
 int main(int argc, char* argv[]) {
-  TString fName = argv[1];
+  std::string fName = argv[1];
   
   anaZgTree t(fName);
-  t.Loop("minitree_"+fName+".root");
+  fName = fName.erase(0,5);
+  cout<<fName<<endl;
+  t.Loop("MiniTree/minitree_"+fName+".root");
   return 0;
 }
 
