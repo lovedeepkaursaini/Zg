@@ -1,0 +1,24 @@
+nohup ./skimZgammaMC . data.txt > d &
+nohup ./skimZgammaMC . dataslr.txt > d &
+nohup ./skimZgammaMC . dataD.txt > d &
+nohup ./skimZgammaMC . dataDslr.txt > d &
+nohup ./skimZgammaMC . dataD_PR.txt > d &
+nohup ./skimZgammaMC . dataD_PR_slr.txt > d &
+nohup ./skimZgammaMC . GJ1.txt > m &
+nohup ./skimZgammaMC . GJ2.txt > m &
+nohup ./skimZgammaMC . GJ3.txt > m &
+nohup ./skimZgammaMC . GJ4.txt > m &
+nohup ./skimZgammaMC . GJ5.txt > m &
+nohup ./skimZgammaMC . QCD0.txt > m &
+nohup ./skimZgammaMC . QCD1.txt > m &
+nohup ./skimZgammaMC . QCD2.txt > m &
+nohup ./skimZgammaMC . QCD3.txt > m &
+nohup ./skimZgammaMC . QCD4.txt > m &
+nohup ./skimZgammaMC . QCD5.txt > m &
+nohup ./skimZgammaMC . QCD6.txt > m &
+nohup ./skimZgammaMC . QCD7.txt > m &
+nohup ./skimZgammaMC . DY.txt > m &
+nohup ./skimZgammaMC . WJ.txt > m &
+nohup ./skimZgammaMC . M750.txt > m &
+nohup ./skimZgammaMC . M2.txt > m &
+

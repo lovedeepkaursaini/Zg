@@ -1,0 +1,23 @@
+nohup ./anaZgTree SKIM/DYJetsToQQ_HT180_skimZg_Feb9 > t &
+nohup ./anaZgTree SKIM/GJets_HT-100To200_skimZg_Feb9 > t &
+nohup ./anaZgTree SKIM/GJets_HT-200To400_skimZg_Feb9 > t &
+nohup ./anaZgTree SKIM/GJets_HT-400To600_skimZg_Feb9 > t &
+nohup ./anaZgTree SKIM/GJets_HT-40To100_skimZg_Feb9 > t &
+nohup ./anaZgTree SKIM/GJets_HT-600ToInf_skimZg_Feb9 > t &
+nohup ./anaZgTree SKIM/QCD_HT100to200_skimZg_Feb9 > t &
+nohup ./anaZgTree SKIM/QCD_HT1000to1500_skimZg_Feb9 > t &
+nohup ./anaZgTree SKIM/QCD_HT1500to2000_skimZg_Feb9 > t &
+nohup ./anaZgTree SKIM/QCD_HT2000toInf_skimZg_Feb9 > t &
+nohup ./anaZgTree SKIM/QCD_HT200to300_skimZg_Feb9 > t &
+nohup ./anaZgTree SKIM/QCD_HT300to500_skimZg_Feb9 > t &
+nohup ./anaZgTree SKIM/QCD_HT500to700_skimZg_Feb9 > t &
+nohup ./anaZgTree SKIM/QCD_HT700to1000_skimZg_Feb9 > t &
+nohup ./anaZgTree SKIM/SP_Run2015C_05Oct15_skimZg_Feb9 > t &
+nohup ./anaZgTree SKIM/SP_Run2015C_05Oct15_slr_skimZg_Feb9 > t &
+nohup ./anaZgTree SKIM/SP_Run2015D_05Oct15_skimZg_Feb9 > t &
+nohup ./anaZgTree SKIM/SP_Run2015D_05Oct15_slr_skimZg_Feb9 > t &
+nohup ./anaZgTree SKIM/SP_Run2015D_PRv4_slr_skimZg_Feb9 > t &
+nohup ./anaZgTree SKIM/WJetsToQQ_HT-600ToInf_skimZg_Feb9 > t &
+nohup ./anaZgTree SKIM/ggtree_mcM2TeV_skimZg_Feb9 > t &
+nohup ./anaZgTree SKIM/ggtree_mcM750GeV_skimZg_Feb9 > t &
+
