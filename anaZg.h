@@ -24,6 +24,11 @@ public :
    // Declaration of leaf types
    Long64_t        event;
    Int_t           run;
+   Int_t           n_Vtx;
+   Int_t           numPU;
+   Float_t         puWt;
+   Float_t         puWtp5;
+   Float_t         puWtm5;
    Float_t         pho_Pt;
    Float_t         pho_Eta;
    Float_t         pho_Phi;
@@ -35,6 +40,7 @@ public :
    Int_t           pho_Medium;
    Float_t         pho_MVA;
    Float_t         fatJ_Pt;
+   Float_t         fatJ_rawPt;
    Float_t         fatJ_Eta;
    Float_t         fatJ_Phi;
    Float_t         fatJ_En;
@@ -44,8 +50,13 @@ public :
    Float_t         fatJ_prdMass;
    Float_t         fatJ_prdMassCorr;
    Float_t         fatJ_Tau21;
+   Float_t         fatJ_Tau31;
    Int_t           fatJ_Ztag;
    Float_t         fatJ_DSVBtag;
+   Float_t         fatJ_CSVBtag;
+   Int_t           fatJ_Id;
+   Int_t           fatJ_partonId;
+   Float_t         fatJ_MUF;
    Float_t         SDSJ0_Pt;
    Float_t         SDSJ0_Eta;
    Float_t         SDSJ0_Phi;
@@ -58,20 +69,15 @@ public :
    Float_t         SDSJ1_Mass;
    Float_t         SDSJ1_En;
    Float_t         SDSJ1_CSV;
-   Float_t         J1_Pt;
-   Float_t         J1_Eta;
-   Float_t         J1_Phi;
-   Float_t         J1_CSVBtag;
-   Float_t         J1_En;
-   Float_t         J2_Pt;
-   Float_t         J2_Eta;
-   Float_t         J2_Phi;
-   Float_t         J2_CSVBtag;
-   Float_t         J2_En;
 
    // List of branches
    TBranch        *b_event;   //!
    TBranch        *b_run;   //!
+   TBranch        *b_puWt;
+   TBranch        *b_puWtp5;
+   TBranch        *b_puWtm5;
+   TBranch        *b_n_Vtx;   //!
+   TBranch        *b_numPU;   //!
    TBranch        *b_pho_Pt;   //!
    TBranch        *b_pho_Eta;   //!
    TBranch        *b_pho_Phi;   //!
@@ -83,6 +89,7 @@ public :
    TBranch        *b_pho_Medium;   //!
    TBranch        *b_pho_MVA;   //!
    TBranch        *b_fatJ_Pt;   //!
+   TBranch        *b_fatJ_rawPt;   //!
    TBranch        *b_fatJ_Eta;   //!
    TBranch        *b_fatJ_Phi;   //!
    TBranch        *b_fatJ_En;
@@ -92,8 +99,13 @@ public :
    TBranch        *b_fatJ_prdMassCorr;   //!
    TBranch        *b_fatJ_Mass;   //!
    TBranch        *b_fatJ_Tau21;   //!
+   TBranch        *b_fatJ_Tau31;   //!
    TBranch        *b_fatJ_Ztag;   //!
    TBranch        *b_fatJ_DSVBtag;   //!
+   TBranch        *b_fatJ_CSVBtag;   //!
+   TBranch        *b_fatJ_Id;   //!
+   TBranch        *b_fatJ_partonId;   //!
+   TBranch        *b_fatJ_MUF;   //!
    TBranch        *b_SDSJ0_Pt;   //!
    TBranch        *b_SDSJ0_Eta;   //!
    TBranch        *b_SDSJ0_Phi;   //!
@@ -106,17 +118,6 @@ public :
    TBranch        *b_SDSJ1_Mass;   //!
    TBranch        *b_SDSJ1_En;   //!
    TBranch        *b_SDSJ1_CSV;   //!
-   TBranch        *b_J1_Pt;   //!
-   TBranch        *b_J1_Eta;   //!
-   TBranch        *b_J1_Phi;   //!
-   TBranch        *b_J1_CSVBtag;   //!
-   TBranch        *b_J1_En;   //!
-   TBranch        *b_J2_Pt;   //!
-   TBranch        *b_J2_Eta;   //!
-   TBranch        *b_J2_Phi;   //!
-   TBranch        *b_J2_CSVBtag;   //!
-   TBranch        *b_J2_En;   //!
-
    anaZg(std::string filename_,double wt_,TTree *tree=0);
    std::string filenam;
    double wt;
@@ -196,6 +197,11 @@ void anaZg::Init(TTree *tree)
 
    fChain->SetBranchAddress("event", &event, &b_event);
    fChain->SetBranchAddress("run", &run, &b_run);
+   fChain->SetBranchAddress("numPU", &numPU, &b_numPU);
+   fChain->SetBranchAddress("n_Vtx", &n_Vtx, &b_n_Vtx);
+   fChain->SetBranchAddress("puWt", &puWt, &b_puWt);
+   fChain->SetBranchAddress("puWtp5", &puWtp5, &b_puWtp5);
+   fChain->SetBranchAddress("puWtm5", &puWtm5, &b_puWtm5);
    fChain->SetBranchAddress("pho_Pt", &pho_Pt, &b_pho_Pt);
    fChain->SetBranchAddress("pho_Eta", &pho_Eta, &b_pho_Eta);
    fChain->SetBranchAddress("pho_Phi", &pho_Phi, &b_pho_Phi);
@@ -207,6 +213,7 @@ void anaZg::Init(TTree *tree)
    fChain->SetBranchAddress("pho_Medium", &pho_Medium, &b_pho_Medium);
    fChain->SetBranchAddress("pho_MVA", &pho_MVA, &b_pho_MVA);
    fChain->SetBranchAddress("fatJ_Pt", &fatJ_Pt, &b_fatJ_Pt);
+   fChain->SetBranchAddress("fatJ_rawPt", &fatJ_rawPt, &b_fatJ_rawPt);
    fChain->SetBranchAddress("fatJ_Eta", &fatJ_Eta, &b_fatJ_Eta);
    fChain->SetBranchAddress("fatJ_Phi", &fatJ_Phi, &b_fatJ_Phi);
    fChain->SetBranchAddress("fatJ_En", &fatJ_En, &b_fatJ_En);
@@ -216,8 +223,13 @@ void anaZg::Init(TTree *tree)
    fChain->SetBranchAddress("fatJ_prdMass", &fatJ_prdMass, &b_fatJ_prdMass);
    fChain->SetBranchAddress("fatJ_prdMassCorr", &fatJ_prdMassCorr, &b_fatJ_prdMassCorr);
    fChain->SetBranchAddress("fatJ_Tau21", &fatJ_Tau21, &b_fatJ_Tau21);
+   fChain->SetBranchAddress("fatJ_Tau31", &fatJ_Tau31, &b_fatJ_Tau31);
    fChain->SetBranchAddress("fatJ_Ztag", &fatJ_Ztag, &b_fatJ_Ztag);
    fChain->SetBranchAddress("fatJ_DSVBtag", &fatJ_DSVBtag, &b_fatJ_DSVBtag);
+   fChain->SetBranchAddress("fatJ_CSVBtag", &fatJ_CSVBtag, &b_fatJ_CSVBtag);
+   fChain->SetBranchAddress("fatJ_Id", &fatJ_Id, &b_fatJ_Id);
+   fChain->SetBranchAddress("fatJ_partonId", &fatJ_partonId, &b_fatJ_partonId);
+   fChain->SetBranchAddress("fatJ_MUF", &fatJ_MUF, &b_fatJ_MUF);
    fChain->SetBranchAddress("SDSJ0_Pt", &SDSJ0_Pt, &b_SDSJ0_Pt);
    fChain->SetBranchAddress("SDSJ0_Eta", &SDSJ0_Eta, &b_SDSJ0_Eta);
    fChain->SetBranchAddress("SDSJ0_Phi", &SDSJ0_Phi, &b_SDSJ0_Phi);
@@ -230,16 +242,6 @@ void anaZg::Init(TTree *tree)
    fChain->SetBranchAddress("SDSJ1_Mass", &SDSJ1_Mass, &b_SDSJ1_Mass);
    fChain->SetBranchAddress("SDSJ1_En", &SDSJ1_En, &b_SDSJ1_En);
    fChain->SetBranchAddress("SDSJ1_CSV", &SDSJ1_CSV, &b_SDSJ1_CSV);
-   fChain->SetBranchAddress("J1_Pt", &J1_Pt, &b_J1_Pt);
-   fChain->SetBranchAddress("J1_Eta", &J1_Eta, &b_J1_Eta);
-   fChain->SetBranchAddress("J1_Phi", &J1_Phi, &b_J1_Phi);
-   fChain->SetBranchAddress("J1_CSVBtag", &J1_CSVBtag, &b_J1_CSVBtag);
-   fChain->SetBranchAddress("J1_En", &J1_En, &b_J1_En);
-   fChain->SetBranchAddress("J2_Pt", &J2_Pt, &b_J2_Pt);
-   fChain->SetBranchAddress("J2_Eta", &J2_Eta, &b_J2_Eta);
-   fChain->SetBranchAddress("J2_Phi", &J2_Phi, &b_J2_Phi);
-   fChain->SetBranchAddress("J2_CSVBtag", &J2_CSVBtag, &b_J2_CSVBtag);
-   fChain->SetBranchAddress("J2_En", &J2_En, &b_J2_En);
    Notify();
 }
 

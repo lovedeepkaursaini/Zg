@@ -18,51 +18,77 @@ void anaZg::Loop()
 {
   if (fChain == 0) return;
   
+  ofstream File("RunCevents.txt");
   TFile* tmp = TFile::Open(("histZg_"+filenam+".root").c_str(), "RECREATE");
   TH1::SetDefaultSumw2();
   
   TH1F* hCounter=new TH1F("hCounter","hCounter",20,0.,20);
+  TH1F* hCounterWt=new TH1F("hCounterWt","hCounterWt",20,0.,20);
 
-  TH1D* hpho_MVAEB=new TH1D("hpho_MVAEB","hpho_MVAEB",100,0,1);
-  TH1D* hpho_MVAEE=new TH1D("hpho_MVAEE","hpho_MVAEE",100,0,1);
-  TH1D*  hPt_pho =new TH1D("hPt_pho","hPt_pho", 40,180,580);
+  TH1D* hpho_MVAEB=new TH1D("hpho_MVAEB","hpho_MVAEB",100,-1,1);
+  TH1D*  hPt_phoEB_pre =new TH1D("hPt_phoEB_pre","hPt_phoEB_pre", 100,0,2000);
+  TH1D*  hEta_phoEB_pre =new TH1D("hEta_phoEB_pre","hEta_phoEB_pre", 30,-1.5,1.5);
 
-  TH1D*  hMass_fatJ =new TH1D("hMass_fatJ","hMass_fatJ", 50,20,220);
-  TH1D*  hPt_fatJ =new TH1D("hPt_fatJ","hPt_fatJ", 50,50,550);
-  TH1D*  hEta_fatJ =new TH1D("hEta_fatJ","hEta_fatJ", 50,-3.,3);
-  TH1D*  hPhi_fatJ =new TH1D("hPhi_fatJ","hPhi_fatJ", 50,-3.5,3.5);
-  TH1D*  hTau21_fatJ =new TH1D("hTau21_fatJ","hTau21_fatJ", 10,0,1);
+  TH1D*  hPt_fatJ_pre =new TH1D("hPt_fatJ_pre","hPt_fatJ_pre", 100,0,2000);
+  TH1D*  hEta_fatJ_pre =new TH1D("hEta_fatJ_pre","hEta_fatJ_pre", 50,-2.5,2.5);
+  TH1D*  hPhi_fatJ_pre =new TH1D("hPhi_fatJ_pre","hPhi_fatJ_pre", 70,-3.5,3.5);
+  TH1D*  hTau21_fatJ_pre =new TH1D("hTau21_fatJ_pre","hTau21_fatJ_pre", 20,0,1);
+  TH1D*  hTau31_fatJ_pre =new TH1D("hTau31_fatJ_pre","hTau31_fatJ_pre", 20,0,1);
+  TH1D*  hMass_fatJ_pre =new TH1D("hMass_fatJ_pre","hMass_fatJ_pre", 50,0,250);
+  TH1D*  hMass_fatJ_tau_pre =new TH1D("hMass_fatJ_tau_pre","hMass_fatJ_tau_pre", 50,0,250);
+  TH1D*  hMass_fatJ_2b_pre =new TH1D("hMass_fatJ_2b_pre","hMass_fatJ_2b_pre", 50,0,250);
+  TH1D*  hMass_fatJ_bb_pre =new TH1D("hMass_fatJ_bb_pre","hMass_fatJ_bb_pre", 50,0,250);
 
-  TH1D*  h1Pt_fatJ =new TH1D("h1Pt_fatJ","h1Pt_fatJ", 50,50,550);
-  TH1D*  h1Eta_fatJ =new TH1D("h1Eta_fatJ","h1Eta_fatJ", 50,-3.,3);
-  TH1D*  h1Phi_fatJ =new TH1D("h1Phi_fatJ","h1Phi_fatJ", 50,-3.5,3.5);
-  TH1D*  h1Tau21_fatJ =new TH1D("h1Tau21_fatJ","h1Tau21_fatJ", 10,0,1);
+  TH1D*  hDSVBtag_fatJ_pre=new TH1D("hDSVBtag_fatJ_pre","hDSVBtag_fatJ_pre",20,-1,1);
+  TH1D*  hDPhi_Zg_pre=new TH1D("hDPhi_Zg_pre","hDPhi_Zg_pre",50,0,3.5);
+  TH1D*  hDEta_Zg_pre=new TH1D("hDEta_Zg_pre","hDEta_Zg_pre",50,0,5.0);
+  TH1D*  hdR_Zg_pre=new TH1D("hdR_Zg_pre","hdR_Zg_pre",50,0,5.0);
+  TH1D*  hCTS_Zg_pre=new TH1D("hCTS_Zg_pre","hCTS_Zg_pre",20,0,1.0);
+  TH1D*  hCSV_sj0_pre=new TH1D("hCSV_sj0_pre","hCSV_sj0_pre",10,0,1);
+  TH1D*  hCSV_sj1_pre=new TH1D("hCSV_sj1_pre","hCSV_sj1_pre",10,0,1);
+  TH1D*  hCSV_sjmin_pre=new TH1D("hCSV_sjmin_pre","hCSV_sjmin_pre",10,0,1);
+  TH1D*  hMass_Zg_pre =new TH1D("hMass_Zg_pre","hMass_Zg_pre", 30,0,3000);
+  TH1D*  hPt_Zg_pre =new TH1D("hPt_Zg_pre","hPt_Zg_pre", 15,0,1500);
 
-  TH1D*  h1prdMass_fatJ =new TH1D("h1prdMass_fatJ","h1prdMass_fatJ", 50,20,220);
-  TH1D*  h1Mass_fatJ =new TH1D("h1Mass_fatJ","h1Mass_fatJ", 50,20,220);
-  TH1D*  h2Mass_fatJ =new TH1D("h2Mass_fatJ","h2Mass_fatJ", 50,20,220);
-  TH1D*  h3Mass_fatJ =new TH1D("h3Mass_fatJ","h3Mass_fatJ", 50,20,220);
-  TH1D*  h4Mass_fatJ =new TH1D("h4Mass_fatJ","h4Mass_fatJ", 50,20,220);
-  TH1D*  hDSVBtag_fatJ=new TH1D("hDSVBtag_fatJ","hDSVBtag_fatJ",50,-1,1);
-  TH1D*  hDPhi_fatZg=new TH1D("hDPhi_fatZg","hDPhi_fatZg",50,0,3.5);
-  TH1D*  hCSV_sj0=new TH1D("hCSV_sj0","hCSV_sj0",50,0,1);
-  TH1D*  hCSV_sj1=new TH1D("hCSV_sj1","hCSV_sj1",50,0,1);
 
-  TH1D*  hMass_j1j2 =new TH1D("hMass_j1j2","hMass_j1j2", 50,20,220);
-  TH1D*  h1Mass_j1j2 =new TH1D("h1Mass_j1j2","h1Mass_j1j2", 50,20,220);
-  TH1D*  h2Mass_j1j2 =new TH1D("h2Mass_j1j2","h2Mass_j1j2", 50,20,220);
-  TH1D*  hCSV_j1=new TH1D("hCSV_j1","hCSV_j1",50,0,1);
-  TH1D*  hCSV_j2=new TH1D("hCSV_j2","hCSV_j2",50,0,1);
-  TH1D*  hDPhi_resZg=new TH1D("hDPhi_resZg","hDPhi_resZg",50,0,3.5);
+  TH1D*  hTau21_fatJ_zm =new TH1D("hTau21_fatJ_zm","hTau21_fatJ_zm", 20,0,1);
+  TH1D*  hDSVBtag_fatJ_zm=new TH1D("hDSVBtag_fatJ_zm","hDSVBtag_fatJ_zm",20,-1,1);
+  TH1D*  hDSVBtag_fatJ_zm_pId=new TH1D("hDSVBtag_fatJ_zm_pId","hDSVBtag_fatJ_zm_pId",20,-1,1);
+  TH1D*  hCSV_sjmin_zm=new TH1D("hCSV_sjmin_zm","hCSV_sjmin_zm",20,-1,1);
+  TH1D*  hCSV_sjmin_zm_pId=new TH1D("hCSV_sjmin_zm_pId","hCSV_sjmin_zm_pId",20,-1,1);
+  TH1D*  hMass_Zg_zm =new TH1D("hMass_Zg_zm","hMass_Zg_zm", 30,0,3000);
+  TH1D*  hPt_Zg_zm =new TH1D("hPt_Zg_zm","hPt_Zg_zm", 15,0,1500);
+  TH1D*  hMass_Zg_SRtau =new TH1D("hMass_Zg_SRtau","hMass_Zg_SRtau", 30,0,3000);
+  TH1D*  hPt_Zg_SRtau =new TH1D("hPt_Zg_SRtau","hPt_Zg_SRtau", 15,0,1500);
+  TH1D*  hMass_Zg_SR2b =new TH1D("hMass_Zg_SR2b","hMass_Zg_SR2b", 30,0,3000);
+  TH1D*  hPt_Zg_SR2b =new TH1D("hPt_Zg_SR2b","hPt_Zg_SR2b", 15,0,1500);
+  TH1D*  hMass_Zg_SRbb =new TH1D("hMass_Zg_SRbb","hMass_Zg_SRbb", 30,0,3000);
+  TH1D*  hPt_Zg_SRbb =new TH1D("hPt_Zg_SRbb","hPt_Zg_SRbb", 15,0,1500);
 
-  TH1D*  hMass_fatZgamma =new TH1D("hMass_fatZgamma","hMass_fatZgamma", 47,300,5000);
-  TH1D*  hMass_fatZbbgamma =new TH1D("hMass_fatZbbgamma","hMass_fatZbbgamma", 47,300,5000);
-  TH1D*  hMass_fatZsjbsjbgamma =new TH1D("hMass_fatZsjbsjbgamma","hMass_fatZsjbsjbgamma", 47,300,5000);
+  TH1D*  hDSVBtag_fatJ_zgm2=new TH1D("hDSVBtag_fatJ_zgm2","hDSVBtag_fatJ_zgm2",20,-1,1);
+  TH1D*  hCSV_sjmin_zgm2=new TH1D("hCSV_sjmin_zgm2","hCSV_sjmin_zgm2",20,-1,1);
+  TH1D*  hDSVBtag_fatJ_zgm7=new TH1D("hDSVBtag_fatJ_zgm7","hDSVBtag_fatJ_zgm7",20,-1,1);
+  TH1D*  hCSV_sjmin_zgm7=new TH1D("hCSV_sjmin_zgm7","hCSV_sjmin_zgm7",10,0,1);
+  TH1D*  hDSVBtag_fatJ_SBzgm7=new TH1D("hDSVBtag_fatJ_SBzgm7","hDSVBtag_fatJ_SBzgm7",20,-1,1);
+  TH1D*  hCSV_sjmin_SBzgm7=new TH1D("hCSV_sjmin_SBzgm7","hCSV_sjmin_SBzgm7",10,0,1);
 
-  TH1D*  hMass_resZgamma =new TH1D("hMass_resZgamma","hMass_resZgamma", 47,300,5000);
-  TH1D*  hMass_resZbbgamma =new TH1D("hMass_resZbbgamma","hMass_resZbbgamma", 47,300,5000);
+  TH1D*  hDSVBtag_fatJ_zgm2_pId=new TH1D("hDSVBtag_fatJ_zgm2_pId","hDSVBtag_fatJ_zgm2_pId",20,-1,1);
+  TH1D*  hCSV_sjmin_zgm2_pId=new TH1D("hCSV_sjmin_zgm2_pId","hCSV_sjmin_zgm2_pId",20,-1,1);
+  TH1D*  hDSVBtag_fatJ_zgm7_pId=new TH1D("hDSVBtag_fatJ_zgm7_pId","hDSVBtag_fatJ_zgm7_pId",20,-1,1);
+  TH1D*  hCSV_sjmin_zgm7_pId=new TH1D("hCSV_sjmin_zgm7_pId","hCSV_sjmin_zgm7_pId",10,0,1);
 
-  TH1D*  hMass_Zgamma =new TH1D("hMass_Zgamma","hMass_Zgamma", 50,0,2200);
+  TH1D*  hMass_Zg_SB =new TH1D("hMass_Zg_SB","hMass_Zg_SB", 30,0,3000);
+  TH1D*  hPt_Zg_SB =new TH1D("hPt_Zg_SB","hPt_Zg_SB", 15,0,1500);
+  TH1D*  hMass_Zg_SBtau =new TH1D("hMass_Zg_SBtau","hMass_Zg_SBtau", 30,0,3000);
+  TH1D*  hPt_Zg_SBtau =new TH1D("hPt_Zg_SBtau","hPt_Zg_SBtau", 15,0,1500);
+  TH1D*  hMass_Zg_SB2b =new TH1D("hMass_Zg_SB2b","hMass_Zg_SB2b", 30,0,3000);
+  TH1D*  hPt_Zg_SB2b =new TH1D("hPt_Zg_SB2b","hPt_Zg_SB2b", 15,0,1500);
+
+  TH1D* hnumPU=new TH1D("hnumPU","hnumPU",50,0,50);
+  TH1D* hnumPURW=new TH1D("hnumPURW","hnumPURW",50,0,50);
+
+  TH1D* hdR_subjets=new TH1D("hdR_subjets","hdR_subjets",20,0,1.0);
+  TH1D* hCorrFact=new TH1D("hCorrFact","JEC corrections",20,0.8,1.2);
 
   Long64_t nentries = fChain->GetEntriesFast();
   
@@ -75,119 +101,225 @@ void anaZg::Loop()
     if(jentry % 10000 == 0) cout << "Processed " << jentry
                                 << " events out of " <<nentries<< endl;
 
+    //apply PU weights
+    float wgt=1;
+    if((filenam.find("Run2015") != string::npos) || (filenam.find("ggtree_mcM") != string::npos)) wgt =1;
+    else wgt=wt*puWtp5;
+
+    //check PU Rw
+    hnumPU->Fill(n_Vtx);
+    hnumPURW->Fill(n_Vtx,wgt);
+
+    //photon+jet pre-selections
+    if(fabs(pho_Eta)>1.4442)continue; //photon in EB only
+    if(fabs(pho_Pt)<180.)continue;//pho pt>180
+    if(fabs(fatJ_Eta)>2.0)continue; //jet, to avoid spillover to HF
+    if(fatJ_Pt<200)continue; //fatjet pt
+    if (fatJ_prdMassCorr<30)continue;//it is -9 where there is no fat jet.   
+    if(!(fatJ_Id==1))continue;//tightLepVetoJetID
+
+    //ele veto
+    if(pho_EleVeto==0)continue;
+    //phoID
+    hpho_MVAEB->Fill(pho_MVA,wgt);
+    if(pho_MVA< 0.374)continue;
     hCounter->Fill(1);
-    // if(pho_Medium !=1) continue;
-    //    if(fabs(pho_Eta)>1.4442)continue; //photon in EB only
-    //https://twiki.cern.ch/twiki/bin/view/CMS/MultivariatePhotonIdentificationRun2
-    if(fabs(pho_Eta)>2.4)continue; //photon in EB+EE only
-    if(fabs(fatJ_Eta)>2.4)continue; //photon in EB+EE only
-    bool phoId = false;
-    if((fabs(pho_Eta)<1.4442))hpho_MVAEB->Fill(pho_MVA,wt);
-    if((fabs(pho_Eta)>1.566))hpho_MVAEE->Fill(pho_MVA,wt);
-    if((fabs(pho_Eta)<1.4442) && (pho_MVA> 0.374))phoId=true;
-    else if((fabs(pho_Eta)>1.566) && (pho_MVA> 0.336))phoId=true;
-    if(phoId==false )continue; //for 90% efficiency WP, the cut is > 0.374 for EB and >0.336 for EE
+    hCounterWt->Fill(1,wt);
     TLorentzVector pho;
     pho.SetPtEtaPhiM(pho_Pt,pho_Eta,pho_Phi, 0);
-    hCounter->Fill(2);
-    hPt_pho->Fill(pho_Pt,wt);
-
-    //fat jet
-    TLorentzVector Z; //Z later on can be from fatZ or jet1+jet2
-    int foundZ = 0;
-
-    TLorentzVector fatZ;
-
-    if (fatJ_prdMassCorr>0){ //it is -9 where there is no fat jet.   
-      hMass_fatJ->Fill(fatJ_SDMassCorr,wt);
-      hPt_fatJ->Fill(fatJ_Pt,wt);
-      hEta_fatJ->Fill(fatJ_Eta,wt);
-      hPhi_fatJ->Fill(fatJ_Phi,wt);
-      hTau21_fatJ->Fill(fatJ_Tau21,wt);
-      if (fatJ_SDMassCorr>70&&fatJ_SDMassCorr<110)
-	{
-	  h1Tau21_fatJ->Fill(fatJ_Tau21,wt);
-	}
-      if(fatJ_Tau21<0.5)
-	{
-	  h1Mass_fatJ->Fill(fatJ_SDMassCorr,wt);
-	  h1prdMass_fatJ->Fill(fatJ_prdMassCorr,wt);
-	  if(fatJ_Pt>200) h2Mass_fatJ->Fill(fatJ_SDMassCorr,wt);
-	  if(fatJ_Pt>200 && fatJ_DSVBtag>0.5)h3Mass_fatJ->Fill(fatJ_SDMassCorr,wt);
-	  if(fatJ_Pt>200 && SDSJ0_CSV>0.605 && SDSJ1_CSV>0.605)h4Mass_fatJ->Fill(fatJ_SDMassCorr,wt);
-	}    
-      fatZ.SetPtEtaPhiE(fatJ_Pt,fatJ_Eta,fatJ_Phi,fatJ_En);
-      
-      //      if(fatJ_Ztag==1){
-      if(fatJ_Tau21<0.5 && fatJ_prdMassCorr>70&&fatJ_prdMassCorr<110){
-	h1Pt_fatJ->Fill(fatJ_Pt,wt);
-	h1Eta_fatJ->Fill(fatJ_Eta,wt);
-	h1Phi_fatJ->Fill(fatJ_Phi,wt);
-	hCounter->Fill(3);
-	foundZ =1 ;
-	Z = fatZ;
-	hDSVBtag_fatJ->Fill(fatJ_DSVBtag,wt);
-	float dphiZg =  acos(cos(fatJ_Phi-pho_Phi));
-	hDPhi_fatZg->Fill(dphiZg,wt);
-        //subjets
-	hCSV_sj0->Fill(SDSJ0_CSV,wt);
-	hCSV_sj1->Fill(SDSJ1_CSV,wt);
-      }
-    }
-     
-    //resolved jets
-    /*    if (foundZ == 0){
-      TLorentzVector jet1;
-      jet1.SetPtEtaPhiE(J1_Pt,J1_Eta,J1_Phi,J1_En);
-      TLorentzVector jet2;
-      jet2.SetPtEtaPhiE(J2_Pt,J2_Eta,J2_Phi,J2_En);
-      hMass_j1j2->Fill((jet1+jet2).M(),wt);
-      if(J1_CSVBtag>0.605)h1Mass_j1j2->Fill((jet1+jet2).M());
-      if(J1_CSVBtag>0.605 && J2_CSVBtag>0.605)h2Mass_j1j2->Fill((jet1+jet2).M());
-      hCounter->Fill(4);
-      if((jet1+jet2).M()<70 || (jet1+jet2).M()>110)continue;
-      hCounter->Fill(5);
-      foundZ = 2;
-      Z = jet1+jet2;
-      float dphiZg =  acos(cos(Z.Phi()-pho_Phi));
-      hDPhi_resZg->Fill(dphiZg,wt);
-
-      hCSV_j1->Fill(J1_CSVBtag,wt);
-      hCSV_j2->Fill(J2_CSVBtag,wt);
-      if(J1_CSVBtag>0.605 && J2_CSVBtag>0.605)hCounter->Fill(6);
-      //https://twiki.cern.ch/twiki/bin/view/CMS/BtagRecommendation74X
-    }
-    */
-    if(foundZ == 0) continue;
-      hCounter->Fill(4);
-
+    TLorentzVector fatJ;
+    fatJ.SetPtEtaPhiE(fatJ_Pt,fatJ_Eta,fatJ_Phi,fatJ_En);
+    //create fatJet+gamma candidates
     TLorentzVector zGamma;
-    zGamma = Z+pho;
+    zGamma = fatJ+pho;
+
+    //fill pre-selection level histos
+    //photons
+    hPt_phoEB_pre->Fill(pho_Pt,wgt);
+    hEta_phoEB_pre->Fill(pho_Eta,wgt);
+    //jets
+    hMass_fatJ_pre->Fill(fatJ_prdMassCorr,wgt);
+    hPt_fatJ_pre->Fill(fatJ_Pt,wgt);
+    hEta_fatJ_pre->Fill(fatJ_Eta,wgt);
+    hPhi_fatJ_pre->Fill(fatJ_Phi,wgt);
+    hTau21_fatJ_pre->Fill(fatJ_Tau21,wgt);
+    hTau31_fatJ_pre->Fill(fatJ_Tau31,wgt);
+    if(fatJ_Tau21<0.5)hMass_fatJ_tau_pre->Fill(fatJ_prdMassCorr,wgt);
+    if(fatJ_DSVBtag>0.4)hMass_fatJ_2b_pre->Fill(fatJ_prdMassCorr,wgt);
+    if(SDSJ0_CSV>0.605 && SDSJ1_CSV>0.605)hMass_fatJ_bb_pre->Fill(fatJ_prdMassCorr,wgt);
+    //CSVv2L 	0.605, CSVv2M 	0.89 
+    //zgamma    
+    hPt_Zg_pre->Fill(zGamma.Pt(),wgt);
+    hMass_Zg_pre->Fill(zGamma.M(),wgt);
+    //b-tag
+    hDSVBtag_fatJ_pre->Fill(fatJ_DSVBtag,wgt);
+    double min = SDSJ0_CSV;
+    if(SDSJ0_CSV<SDSJ1_CSV)min = SDSJ0_CSV;
+    else min = SDSJ1_CSV;
+    hCSV_sjmin_pre->Fill(min,wgt);
+    hCSV_sj0_pre->Fill(SDSJ0_CSV,wgt);
+    hCSV_sj1_pre->Fill(SDSJ1_CSV,wgt);
     
-    if(foundZ ==1)
+    //get dPhi(jet,pho)
+    float dphiZg =  acos(cos(fatJ_Phi-pho_Phi));
+    hDPhi_Zg_pre->Fill(dphiZg,wgt);
+    
+    //get dEta(jet,pho)
+    float detaZg =  fabs(fatJ_Eta-pho_Eta);
+    hDEta_Zg_pre->Fill(detaZg,wgt);
+    
+    //get dR(jet,pho)
+    float dRZg = fatJ.DeltaR(pho);
+    hdR_Zg_pre->Fill(dRZg,wgt);
+
+    //get cos theta star
+    TLorentzVector boostedJet = fatJ;
+    TLorentzVector boostedPho = pho;
+    TLorentzVector sumVector = pho + fatJ;
+    boostedPho.Boost(-(sumVector.BoostVector()));
+    boostedJet.Boost(-(sumVector.BoostVector()));
+    float cosThetaStar = std::abs(boostedPho.Pz()/boostedPho.P());
+    hCTS_Zg_pre->Fill(cosThetaStar,wgt);
+    if(cosThetaStar>0.6)continue;
+	hCounter->Fill(2);
+	hCounterWt->Fill(2,wgt);
+    
+    //Define SR
+    
+    if(fatJ_prdMassCorr>75&&fatJ_prdMassCorr<105)
       {
-	hCounter->Fill(5);
-	hMass_Zgamma->Fill(zGamma.M(),wt);
-	hMass_fatZgamma->Fill(zGamma.M(),wt);
-	if(fatJ_DSVBtag>0.5)hMass_fatZbbgamma->Fill(zGamma.M(),wt);
-	if(fatJ_DSVBtag>0.5)hCounter->Fill(6);
-        if(SDSJ0_CSV>0.605 && SDSJ0_CSV>0.605 )hMass_fatZsjbsjbgamma->Fill(zGamma.M(),wt);
-	if(SDSJ0_CSV>0.605 && SDSJ0_CSV>0.605 )hCounter->Fill(7);
-	if(SDSJ0_CSV>0.89 && SDSJ0_CSV>0.89  )hCounter->Fill(8);
-	if(SDSJ0_CSV>0.97 && SDSJ0_CSV>0.97 )hCounter->Fill(9);
+	hCounter->Fill(3);
+	hCounterWt->Fill(3,wgt);
+	hTau21_fatJ_zm->Fill(fatJ_Tau21,wgt);
+	hDSVBtag_fatJ_zm->Fill(fatJ_DSVBtag,wgt);
+	hCSV_sjmin_zm->Fill(min,wgt);
+	hPt_Zg_zm->Fill(zGamma.Pt(),wgt);
+	hMass_Zg_zm->Fill(zGamma.M(),wgt);
+	if(filenam.find("ggtree_mcM") != string::npos)
+	  {
+	    if(abs(fatJ_partonId)==5)
+	      {
+		hDSVBtag_fatJ_zm_pId->Fill(fatJ_DSVBtag,wgt);
+		hCSV_sjmin_zm_pId->Fill(min,wgt);
+	      }
+	  }
+	if(zGamma.M()>1850 && zGamma.M()<2150) 
+	  {
+	    hDSVBtag_fatJ_zgm2->Fill(fatJ_DSVBtag,wgt);
+	    hCSV_sjmin_zgm2->Fill(min,wgt);
+	    if(filenam.find("ggtree_mcM") != string::npos)
+	      {
+		if(abs(fatJ_partonId)==5)
+		  {
+		    hDSVBtag_fatJ_zgm2_pId->Fill(fatJ_DSVBtag,wgt);
+		    hCSV_sjmin_zgm2_pId->Fill(min,wgt);
+		  }
+	      }
+	  }
+	if(zGamma.M()>710 && zGamma.M()<790) 
+	  {
+	    hCounter->Fill(4);
+	    hCounterWt->Fill(4,wgt);
+	    hDSVBtag_fatJ_zgm7->Fill(fatJ_DSVBtag,wgt);
+	    hCSV_sjmin_zgm7->Fill(min,wgt);
+	    if(filenam.find("ggtree_mcM") != string::npos)
+	      {
+		if(abs(fatJ_partonId)==5)
+		  {
+		    hCounter->Fill(5);
+		    hCounterWt->Fill(5,wgt);
+		    hDSVBtag_fatJ_zgm7_pId->Fill(fatJ_DSVBtag,wgt);
+		    hCSV_sjmin_zgm7_pId->Fill(min,wgt);
+		  }
+	      }
+	  }
+	
+	if(fatJ_Tau21<0.5){
+	  hCounter->Fill(6);
+	  hCounterWt->Fill(6,wt);
+	  hPt_Zg_SBtau->Fill(zGamma.Pt(),wgt);
+	  hMass_Zg_SBtau->Fill(zGamma.M(),wgt);
+	  double corrFact = fatJ_Pt/fatJ_rawPt;
+	  hCorrFact->Fill(corrFact,wgt);
+	  //  double corrPer = (fatJ_Pt-fatJ_rawPt)/fatJ_rawPt;
+	  File<<run<<'\t'<<event<<'\t'<<pho_Pt<<'\t'<<fatJ_Pt<<'\t'<<
+	    //fatJ_rawPt<<" ( corrFact: ) "<<corrFact<<corrPer<<
+	    '\t'<<fatJ_prdMassCorr<<endl;
+	}
+	if(fatJ_DSVBtag>0.4)
+	  {
+	    hMass_Zg_SR2b->Fill(zGamma.M(),wgt);
+	    hPt_Zg_SR2b->Fill(zGamma.Pt(),wgt);
+	    hCounter->Fill(8);
+	    hCounterWt->Fill(8,wt);
+	    if(zGamma.M()>710 && zGamma.M()<790){
+	    hCounter->Fill(9);
+	    hCounterWt->Fill(9,wt);
+	    }
+	  }
+	if(SDSJ0_CSV>0.605 && SDSJ1_CSV>0.605)
+	  {
+	    hMass_Zg_SRbb->Fill(zGamma.M(),wgt);
+	    hPt_Zg_SRbb->Fill(zGamma.Pt(),wgt);
+	    if(zGamma.M()>710 && zGamma.M()<790)
+	      {
+		hCounter->Fill(10);
+		hCounterWt->Fill(10,wt);
+	      }
+	  }
+	if(min>0.605)
+	  {
+	    if(zGamma.M()>710 && zGamma.M()<790)
+	      {
+		hCounter->Fill(11);
+		hCounterWt->Fill(11,wt);
+	      }
+	  }
       }
-    /*  else if(foundZ ==2)
+    
+    TLorentzVector SJ0;
+    SJ0.SetPtEtaPhiE(SDSJ0_Pt,SDSJ0_Eta,SDSJ0_Phi,SDSJ0_En);
+    TLorentzVector SJ1;
+    SJ1.SetPtEtaPhiE(SDSJ1_Pt,SDSJ1_Eta,SDSJ1_Phi,SDSJ1_En);
+    
+    double dRsj = SJ0.DeltaR(SJ1);
+    hdR_subjets->Fill(dRsj,wgt);
+    
+    if(fatJ_prdMassCorr>50&&fatJ_prdMassCorr<70)
       {
-	hMass_Zgamma->Fill(zGamma.M(),wt);
-	hMass_resZgamma->Fill(zGamma.M(),wt);
-	if(J1_CSVBtag>0.605 && J2_CSVBtag>0.605)hMass_resZbbgamma->Fill(zGamma.M(),wt);
-	}*/
+	    hCounter->Fill(14);
+	    hCounterWt->Fill(14,wt);
+	hMass_Zg_SB->Fill(zGamma.M(),wgt);
+	hPt_Zg_SB->Fill(zGamma.Pt(),wgt);
+	if(zGamma.M()>710 && zGamma.M()<790)
+	  {
+	    hCounter->Fill(15);
+	    hCounterWt->Fill(15,wt);
+	    hDSVBtag_fatJ_SBzgm7->Fill(fatJ_DSVBtag,wgt);
+	    hCSV_sjmin_SBzgm7->Fill(min,wgt);
+	    if(fatJ_DSVBtag>0.4)
+	      {
+		hCounter->Fill(16);
+		hCounterWt->Fill(16,wt);
+	      }
+	  }
+	if(fatJ_DSVBtag<0.4)
+	  {
+	    hMass_Zg_SB2b->Fill(zGamma.M(),wgt);
+	    hPt_Zg_SB2b->Fill(zGamma.Pt(),wgt);
+	  }
+	if(fatJ_Tau21>0.5)
+	  {
+	    hMass_Zg_SBtau->Fill(zGamma.M(),wgt);
+	    hPt_Zg_SBtau->Fill(zGamma.Pt(),wgt);
+	  }
+      }
   }
-  
-  
   tmp->Write();
   tmp->Close();
 }
+
+
 
 
 
